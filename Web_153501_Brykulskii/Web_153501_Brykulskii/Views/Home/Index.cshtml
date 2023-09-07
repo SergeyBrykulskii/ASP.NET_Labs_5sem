@@ -1,0 +1,37 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+<main class="container main">
+    <h1>Лабораторная работа 1</h1>
+    <h2>Список</h2>
+    <ol type="A">
+        @for (int i = 0; i < 10; i++)
+		{
+			<li>Элемент списка @i</li>
+		}
+    </ol>
+    <hr/>
+    <h2>Форма</h2>
+    <form method="post">
+        <div>
+            <input type="checkbox" name="checkbox1" value="isChecked"> Чек-бокс 1
+        </div>
+        <div>
+            <input type="checkbox" name="checkbox2" value="isChecked"> Чек-бокс 2
+        </div>
+        <label>
+            <input type="radio" name="group" value="value1"> Радио-1
+            <input type="radio" name="group" value="value2"> Радио-2
+            <input type="radio" name="group" value="value3"> Радио-3
+        </label>
+        <br>
+            <label for="login" class="form-label">Логин:</label>
+            <input type="text" class="form-control" id="login" name="login" required>
+            <br>
+            <label for="password" class="form-label">Пароль:</label>
+            <input type="password" class="form-control" id="password" name="password" required>
+        <br>
+        <button class="btn-primary">Отправить</button>
+    </form>
+</main>
