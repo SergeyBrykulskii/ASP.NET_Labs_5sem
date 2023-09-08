@@ -1,3 +1,0 @@
-﻿<Project>
-  <Import Project="..\buildMultiTargeting\Web_153501_Brykulskii.props" />
-</Project>
