@@ -1,3 +1,6 @@
+using Web_153501_Brykulskii.Services.PictureGenreService;
+using Web_153501_Brykulskii.Services.PictureService;
+
 namespace Web_153501_Brykulskii
 {
     public class Program
@@ -8,6 +11,8 @@ namespace Web_153501_Brykulskii
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddScoped<IPictureGenreService, MemoryPictureGenreService>();
+            builder.Services.AddScoped<IPictureService, MemoryPictureService>();
 
             var app = builder.Build();
 
