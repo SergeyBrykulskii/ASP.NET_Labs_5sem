@@ -27,3 +27,17 @@ header {
 .footer {
     flex: 0 0 auto;
 }
+
+.image-container {
+    width: 18rem; 
+    height: 14rem; 
+    overflow: hidden; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-container img {
+    max-height: 100%; 
+    width: auto; 
+}
