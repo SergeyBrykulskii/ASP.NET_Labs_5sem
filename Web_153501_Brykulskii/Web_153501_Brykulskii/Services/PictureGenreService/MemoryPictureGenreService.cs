@@ -18,7 +18,8 @@ public class MemoryPictureGenreService : IPictureGenreService
 
         var result = new ResponseData<List<PictureGenre>>
         {
-            Data = genres
+            Data = genres,
+            Success = true,
         };
 
         return Task.FromResult(result);

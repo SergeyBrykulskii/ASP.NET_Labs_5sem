@@ -28,7 +28,7 @@ public class DbInitializer
                 Author = "Леонардо да Винчи",
                 Description="Картина Леонардо да Винчи, одно из самых известных произведений живописи",
                 Price = 2500000000,
-                ImagePath = "Images/MonaLiza.jpg",
+                ImagePath = "MonaLiza.jpg",
                 ImageMimeType = "image/jpeg",
                 Genre = portraitGenre
             },
@@ -38,7 +38,7 @@ public class DbInitializer
                 Author = "Айвазовский Иван Константинович",
                 Description = "Одна из самых знаменитых картин русского художника-мариниста Ивана Айвазовского, хранится в Русском музее в Санкт-Петербурге",
                 Price = 700000,
-                ImagePath = "Images/NinthWave.jpg",
+                ImagePath = "NinthWave.jpg",
                 ImageMimeType = "image/jpeg",
                 Genre = marinaGenre
             },
@@ -48,7 +48,7 @@ public class DbInitializer
                 Author = "Микеланджело Меризи да Караваджо",
                 Description = "Это одна из немногих картин художника, сюжет которой — исключительно натюрморт",
                 Price = 50000,
-                ImagePath = "Images/BasketOfFlowers.jpg",
+                ImagePath = "BasketOfFlowers.jpg",
                 ImageMimeType = "image/jpeg",
                 Genre = stillLifeGenre
             },
@@ -58,7 +58,7 @@ public class DbInitializer
                 Author = "Куинджи Архип Иванович",
                 Description = "Пейзаж русского художника Архипа Куинджи, написанный в 1880 году",
                 Price = 20000,
-                ImagePath = "Images/MoonNight.jpg",
+                ImagePath = "MoonNight.jpg",
                 ImageMimeType = "image/jpeg",
                 Genre = landscapeGenre
             },
@@ -68,7 +68,7 @@ public class DbInitializer
                 Author = " Валентин Александрович Серов",
                 Description = "Картина русского живописца Валентина Серова, написана в 1887 году, хранится в Государственной Третьяковской галерее",
                 Price = 200000,
-                ImagePath = "Images/GirlWithPeaches.jpg",
+                ImagePath = "GirlWithPeaches.jpg",
                 ImageMimeType = "image/jpeg",
                 Genre = portraitGenre
             },
@@ -78,7 +78,7 @@ public class DbInitializer
                 Author = "Винсента ван Гога",
                 Description = "Картина нидерландского и французского художника Винсента ван Гога. Написана во время пребывания ван Гога в Арле в январе 1889 года",
                 Price = 80000000,
-                ImagePath = "Images/SelfPortraitWithBandagedEar.jpg",
+                ImagePath = "SelfPortraitWithBandagedEar.jpg",
                 ImageMimeType = "image/jpeg",
                 Genre = portraitGenre
             },
@@ -88,7 +88,7 @@ public class DbInitializer
                 Author = "Ян Вермеер",
                 Description = "Одна из наиболее известных картин нидерландского художника Яна Вермеера. Её часто называют северной или голландской Моной Лизой",
                 Price = 12000000,
-                ImagePath = "Images/GirlWithPearlEarring.jpg",
+                ImagePath = "GirlWithPearlEarring.jpg",
                 ImageMimeType = "image/jpeg",
                 Genre = portraitGenre
             },

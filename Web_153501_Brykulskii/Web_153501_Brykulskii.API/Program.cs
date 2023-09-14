@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Web_153501_Brykulskii.API.Data;
+using Web_153501_Brykulskii.API.Services;
 
 namespace Web_153501_Brykulskii.API;
 
@@ -16,6 +17,8 @@ public class Program
 
         builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(connStr));
         builder.Services.AddControllers();
+        builder.Services.AddScoped<IPictureService, PictureService>();
+        builder.Services.AddScoped<IPictureGenreService, PictureGenreService>();
 
         var app = builder.Build();
 
