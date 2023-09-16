@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Web_153501_Brykulskii.Converters;
 using Web_153501_Brykulskii.Services.PictureGenreService;
 using Web_153501_Brykulskii.Services.PictureService;
 
@@ -18,16 +19,16 @@ public class ProductController : Controller
     }
     public async Task<IActionResult> Index(string? genre, int pageNo = 1)
     {
-        ViewData["genres"] = (await _pictureGenreService.GetPictureGenreListAsync()).Data;
-
+        var genresResponse = await _pictureGenreService.GetPictureGenreListAsync();
         var pictureResponse = await _pictureService.GetPictureListAsync(genre, pageNo);
 
-        if (!pictureResponse.Success)
+        if (!pictureResponse.Success || !genresResponse.Success)
         {
-            return NotFound(pictureResponse.ErrorMessage);
+            return NotFound(pictureResponse.ErrorMessage + '\n' + genresResponse.ErrorMessage);
         }
 
-        ViewData["currentGenre"] = genre == null ? genre : pictureResponse.Data?.Items?.FirstOrDefault()?.Genre?.Name;
+        ViewData["genres"] = genresResponse.Data;
+        ViewData["currentGenre"] = GenreConverter.ConvertToRu(genre);
 
         return View((pictureResponse.Data!.Items, pictureResponse.Data.CurrentPage, pictureResponse.Data.TotalPages));
     }

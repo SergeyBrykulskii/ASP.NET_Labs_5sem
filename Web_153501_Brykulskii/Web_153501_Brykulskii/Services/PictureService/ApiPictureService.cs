@@ -47,6 +47,7 @@ public class ApiPictureService : IPictureService
         };
     }
 
+    // todo: реализовать метод, возможно нужно возвращать результат
     public Task DeletePictureAsync(int id)
     {
         throw new NotImplementedException();
@@ -59,24 +60,17 @@ public class ApiPictureService : IPictureService
 
     public async Task<ResponseData<ListModel<Picture>>> GetPictureListAsync(string? genreNormalizedName, int pageNo = 1)
     {
-        // подготовка URL запроса
-        var urlString = new StringBuilder($"{_httpClient.BaseAddress!.AbsoluteUri}pictures/");
-        // добавить категорию в маршрут
+        var urlString = new StringBuilder($"{_httpClient.BaseAddress!.AbsoluteUri}Pictures/");
+
         if (genreNormalizedName != null)
-        {
             urlString.Append($"{genreNormalizedName}/");
-        };
-        // добавить номер страницы в маршрут
+
         if (pageNo > 1)
-        {
             urlString.Append($"page{pageNo}");
-        };
-        // добавить размер страницы в строку запроса
+
         if (!_pageSize.Equals("3"))
-        {
             urlString.Append(QueryString.Create("pageSize", _pageSize.ToString()));
-        }
-        // отправить запрос к API
+
         var response = await _httpClient.GetAsync(new Uri(urlString.ToString()));
 
         if (response.IsSuccessStatusCode)

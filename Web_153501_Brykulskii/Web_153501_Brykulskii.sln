@@ -7,7 +7,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web_153501_Brykulskii", "We
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web_153501_Brykulskii.Domain", "Web_153501_Brykulskii.Domain\Web_153501_Brykulskii.Domain.csproj", "{AB74083E-8D35-48B1-B89C-886CB8530551}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web_153501_Brykulskii.API", "Web_153501_Brykulskii.API\Web_153501_Brykulskii.API.csproj", "{C81A00FD-68D8-4EFD-8444-40A75CF6C75E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web_153501_Brykulskii.API", "Web_153501_Brykulskii.API\Web_153501_Brykulskii.API.csproj", "{C81A00FD-68D8-4EFD-8444-40A75CF6C75E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

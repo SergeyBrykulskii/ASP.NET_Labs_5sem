@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Web_153501_Brykulskii.Domain\Web_153501_Brykulskii.Domain.csproj" />
-    <ProjectReference Include="..\Web_153501_Brykulskii\Web_153501_Brykulskii.csproj" />
   </ItemGroup>
 
 </Project>

@@ -12,15 +12,23 @@ public class Program
 
         // Add services to the container.
         builder.Services.AddControllersWithViews();
-        builder.Services.AddScoped<IPictureGenreService, MemoryPictureGenreService>();
+        builder.Services.AddRazorPages();
+        //builder.Services.AddScoped<IPictureGenreService, MemoryPictureGenreService>();
         //builder.Services.AddScoped<IPictureService, MemoryPictureService>();
 
         UriData.ApiUri = builder.Configuration.GetSection("UriData")[key: "ApiUri"]!;
+
         builder.Services.AddHttpClient<IPictureService, ApiPictureService>(client =>
             client.BaseAddress = new Uri(UriData.ApiUri));
 
-        //builder.Services.AddHttpClient<IPictureGenreService, ApiPictureGenreService>(client =>
-        //    client.BaseAddress = new Uri(UriData.ApiUri));
+        builder.Services.AddHttpClient<IPictureGenreService, ApiPictureGenreService>(client =>
+            client.BaseAddress = new Uri(UriData.ApiUri));
+
+        // to delete
+        //var connectionString = "Data Source=app.db";
+        //string dataDirectory = AppDomain.CurrentDomain.BaseDirectory + Path.DirectorySeparatorChar;
+        //connectionString = string.Format(connectionString!, dataDirectory);
+        //builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(connectionString).EnableSensitiveDataLogging());
 
         var app = builder.Build();
 
@@ -42,6 +50,7 @@ public class Program
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");
+        app.MapRazorPages();
 
         app.Run();
     }
