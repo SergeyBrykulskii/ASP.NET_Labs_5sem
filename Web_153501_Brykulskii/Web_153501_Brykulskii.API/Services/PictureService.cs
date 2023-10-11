@@ -1,7 +1,7 @@
-﻿using Web_153501_Brykulskii.API.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using Web_153501_Brykulskii.API.Data;
 using Web_153501_Brykulskii.Domain.Entities;
 using Web_153501_Brykulskii.Domain.Models;
-using Microsoft.EntityFrameworkCore;
 
 namespace Web_153501_Brykulskii.API.Services;
 
@@ -13,21 +13,6 @@ public class PictureService : IPictureService
     public PictureService(AppDbContext context)
     {
         _context = context;
-    }
-
-    public Task<ResponseData<Picture>> CreatePictureAsync(Picture picture, IFormFile? formFile)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task DeletePictureAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<ResponseData<Picture>> GetPictureByIdAsync(int id)
-    {
-        throw new NotImplementedException();
     }
 
     public async Task<ResponseData<ListModel<Picture>>> GetPictureListAsync(string? genreNormalizedName, int pageNo = 1, int pageSize = 3)
@@ -78,13 +63,70 @@ public class PictureService : IPictureService
         return response;
     }
 
+    public async Task<ResponseData<Picture>> CreatePictureAsync(Picture picture)
+    {
+        await _context.Pictures.AddAsync(picture);
+        await _context.SaveChangesAsync();
+
+        return new ResponseData<Picture>()
+        {
+            Data = picture,
+            Success = true
+        };
+    }
+
+    public async Task DeletePictureAsync(int id)
+    {
+        var picture = await _context.Pictures.FindAsync(id);
+        if (picture != null)
+        {
+            _context.Pictures.Remove(picture);
+            await _context.SaveChangesAsync();
+        }
+        else
+            throw new ArgumentException("Picture with such id not found");
+    }
+
+    public async Task<ResponseData<Picture>> GetPictureByIdAsync(int id)
+    {
+        var picture = await _context.Pictures.FindAsync(id);
+        if (picture != null)
+        {
+            return new ResponseData<Picture>()
+            {
+                Data = picture,
+                Success = true
+            };
+        }
+        else
+            return new ResponseData<Picture>()
+            {
+                Data = null,
+                Success = false,
+                ErrorMessage = "Picture with such id not found"
+            };
+    }
+
     public Task<ResponseData<string>> SaveImageAsync(int id, IFormFile formFile)
     {
         throw new NotImplementedException();
     }
 
-    public Task UpdatePictureAsync(int id, Picture picture, IFormFile? formFile)
+    public async Task UpdatePictureAsync(int id, Picture picture)
     {
-        throw new NotImplementedException();
+
+        var pictureToUpdate = await _context.Pictures.FindAsync(id);
+        if (pictureToUpdate != null)
+        {
+            pictureToUpdate.Name = picture.Name;
+            pictureToUpdate.Description = picture.Description;
+            pictureToUpdate.Price = picture.Price;
+            pictureToUpdate.Author = picture.Author;
+            pictureToUpdate.Genre = picture.Genre;
+            pictureToUpdate.GenreId = picture.GenreId;
+            await _context.SaveChangesAsync();
+        }
+        else
+            throw new ArgumentException("Picture with such id not found");
     }
 }

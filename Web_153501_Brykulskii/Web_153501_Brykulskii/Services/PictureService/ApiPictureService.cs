@@ -28,16 +28,19 @@ public class ApiPictureService : IPictureService
 
     public async Task<ResponseData<Picture>> CreatePictureAsync(Picture picture, IFormFile? formFile)
     {
-        var uri = new Uri(_httpClient.BaseAddress!.AbsoluteUri + "Pictures");
+        var uri = new Uri($"{_httpClient.BaseAddress!.AbsoluteUri}Pictures");
         var response = await _httpClient.PostAsJsonAsync(uri, picture, _serializerOptions);
+
         if (response.IsSuccessStatusCode)
         {
             var data = await response
-            .Content
-            .ReadFromJsonAsync<ResponseData<Picture>>
-            (_serializerOptions);
+                .Content
+                .ReadFromJsonAsync<ResponseData<Picture>>
+                (_serializerOptions);
+
             return data; // picture;
         }
+
         _logger.LogError($"-----> object not created. Error:{response.StatusCode}");
 
         return new ResponseData<Picture>
@@ -45,17 +48,6 @@ public class ApiPictureService : IPictureService
             Success = false,
             ErrorMessage = $"Объект не добавлен. Error:{response.StatusCode}"
         };
-    }
-
-    // todo: реализовать метод, возможно нужно возвращать результат
-    public Task DeletePictureAsync(int id)
-    {
-        throw new NotImplementedException();
-    }
-
-    public Task<ResponseData<Picture>> GetPictureByIdAsync(int id)
-    {
-        throw new NotImplementedException();
     }
 
     public async Task<ResponseData<ListModel<Picture>>> GetPictureListAsync(string? genreNormalizedName, int pageNo = 1)
@@ -78,9 +70,9 @@ public class ApiPictureService : IPictureService
             try
             {
                 return await response
-                .Content
-                .ReadFromJsonAsync<ResponseData<ListModel<Picture>>>
-                (_serializerOptions);
+                    .Content
+                    .ReadFromJsonAsync<ResponseData<ListModel<Picture>>>
+                    (_serializerOptions);
             }
             catch (JsonException ex)
             {
@@ -101,8 +93,61 @@ public class ApiPictureService : IPictureService
         };
     }
 
-    public Task UpdatePictureAsync(int id, Picture picture, IFormFile? formFile)
+    public async Task DeletePictureAsync(int id)
     {
-        throw new NotImplementedException();
+        var uri = new Uri($"{_httpClient.BaseAddress!.AbsoluteUri}Pictures/{id}");
+
+        var response = await _httpClient.DeleteAsync(uri);
+
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger.LogError($"-----> Данные не получены от сервера. Error:{response.StatusCode}");
+        }
+    }
+
+    public async Task<ResponseData<Picture>> GetPictureByIdAsync(int id)
+    {
+        var uri = new Uri($"{_httpClient.BaseAddress!.AbsoluteUri}Pictures/{id}");
+
+        var response = await _httpClient.GetAsync(uri);
+
+        if (response.IsSuccessStatusCode)
+        {
+            try
+            {
+                return await response
+                    .Content
+                    .ReadFromJsonAsync<ResponseData<Picture>>
+                    (_serializerOptions);
+            }
+            catch (JsonException ex)
+            {
+                _logger.LogError($"-----> Ошибка: {ex.Message}");
+                return new ResponseData<Picture>
+                {
+                    Success = false,
+                    ErrorMessage = $"Ошибка: {ex.Message}"
+                };
+            }
+        }
+
+        _logger.LogError($"-----> Данные не получены от сервера. Error:{response.StatusCode}");
+        return new ResponseData<Picture>
+        {
+            Success = false,
+            ErrorMessage = $"Данные не получены от сервера. Error: {response.StatusCode}"
+        };
+    }
+
+    public async Task UpdatePictureAsync(int id, Picture picture, IFormFile? formFile)
+    {
+        var uri = new Uri($"{_httpClient.BaseAddress!.AbsoluteUri}Pictures/{id}");
+
+        var response = await _httpClient.PutAsync(uri, new StringContent(JsonSerializer.Serialize(picture), Encoding.UTF8, "application/json"));
+
+        if (!response.IsSuccessStatusCode)
+        {
+            _logger.LogError($"-----> Данные не получены от сервера. Error:{response.StatusCode}");
+        }
     }
 }

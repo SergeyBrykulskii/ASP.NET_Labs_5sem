@@ -13,7 +13,6 @@ public class ApiPictureGenreService : IPictureGenreService
 
     public ApiPictureGenreService(
         HttpClient httpClient,
-        IConfiguration configuration,
         ILogger<ApiPictureService> logger)
     {
         _httpClient = httpClient;

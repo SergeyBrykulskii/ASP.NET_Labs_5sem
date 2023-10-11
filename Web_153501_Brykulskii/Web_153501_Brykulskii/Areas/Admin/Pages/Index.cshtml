@@ -31,10 +31,6 @@
             <th>
                 @Html.DisplayNameFor(model => model.Pictures[0].ImagePath)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Pictures[0].ImageMimeType)
-            </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -57,9 +53,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.ImagePath)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImageMimeType)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
