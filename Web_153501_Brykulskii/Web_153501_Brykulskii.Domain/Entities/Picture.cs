@@ -8,7 +8,7 @@ public class Picture
     public string? Description { get; set; }
     public uint? Price { get; set; }
     public int GenreId { get; set; }
-    public PictureGenre Genre { get; set; }
+    public PictureGenre? Genre { get; set; }
     public string? ImagePath { get; set; }
     public string? ImageMimeType { get; set; }
 }

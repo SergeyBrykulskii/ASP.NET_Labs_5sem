@@ -26,9 +26,6 @@
                 @Html.DisplayNameFor(model => model.Pictures[0].Price)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Pictures[0].Genre)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.Pictures[0].ImagePath)
             </th>
         </tr>
@@ -49,10 +46,9 @@
                 @Html.DisplayFor(modelItem => item.Price)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Genre.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ImagePath)
+                <div class="image-container">
+                    <img src="@item.ImagePath" class="card-img-top" alt="@item.Name">
+                </div>
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
