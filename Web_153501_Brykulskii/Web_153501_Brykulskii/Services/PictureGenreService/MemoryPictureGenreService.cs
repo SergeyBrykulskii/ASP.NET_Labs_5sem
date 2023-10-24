@@ -13,7 +13,6 @@ public class MemoryPictureGenreService : IPictureGenreService
             new PictureGenre { Id=2, Name="Пейзаж", NormalizedName="landscape" },
             new PictureGenre { Id=3, Name="Марина", NormalizedName="marina" },
             new PictureGenre { Id=4, Name="Натюрморт", NormalizedName="still-life" },
-
         };
 
         var result = new ResponseData<List<PictureGenre>>
