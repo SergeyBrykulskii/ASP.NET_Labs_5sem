@@ -38,6 +38,11 @@ public class ApiPictureService : IPictureService
                 .ReadFromJsonAsync<ResponseData<Picture>>
                 (_serializerOptions);
 
+            if (formFile != null)
+            {
+                await SaveImageAsync(data.Data.Id, formFile);
+            }
+
             return data; // picture;
         }
 
@@ -145,9 +150,29 @@ public class ApiPictureService : IPictureService
 
         var response = await _httpClient.PutAsync(uri, new StringContent(JsonSerializer.Serialize(picture), Encoding.UTF8, "application/json"));
 
-        if (!response.IsSuccessStatusCode)
+        if (response.IsSuccessStatusCode)
+        {
+            if (formFile != null)
+                await SaveImageAsync(id, formFile);
+        }
+        else
         {
             _logger.LogError($"-----> Данные не получены от сервера. Error:{response.StatusCode}");
         }
+    }
+    private async Task SaveImageAsync(int id, IFormFile image)
+    {
+        var request = new HttpRequestMessage
+        {
+            Method = HttpMethod.Post,
+            RequestUri = new Uri($"{_httpClient.BaseAddress!.AbsoluteUri}Dishes/{id}")
+        };
+
+        var content = new MultipartFormDataContent();
+        var streamContent = new StreamContent(image.OpenReadStream());
+        content.Add(streamContent, "formFile", image.FileName);
+        request.Content = content;
+
+        await _httpClient.SendAsync(request);
     }
 }

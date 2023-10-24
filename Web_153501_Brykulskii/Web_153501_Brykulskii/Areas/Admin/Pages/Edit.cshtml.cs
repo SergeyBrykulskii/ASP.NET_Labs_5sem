@@ -23,6 +23,9 @@ namespace Web_153501_Brykulskii.Areas.Admin.Pages
         [BindProperty]
         public Picture Picture { get; set; } = default!;
 
+        [BindProperty]
+        public IFormFile? Image { get; set; }
+
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             if (id == null)
@@ -55,7 +58,7 @@ namespace Web_153501_Brykulskii.Areas.Admin.Pages
 
             try
             {
-                await _pictureService.UpdatePictureAsync(Picture.Id, Picture, null);
+                await _pictureService.UpdatePictureAsync(Picture.Id, Picture, Image);
             }
             catch (Exception)
             {

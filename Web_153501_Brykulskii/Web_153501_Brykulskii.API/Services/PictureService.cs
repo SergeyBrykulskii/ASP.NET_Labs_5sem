@@ -8,11 +8,19 @@ namespace Web_153501_Brykulskii.API.Services;
 public class PictureService : IPictureService
 {
     private readonly AppDbContext _context;
+    private readonly IHttpContextAccessor _httpContextAccessor;
+    private readonly IWebHostEnvironment _webHostEnvironment;
     private readonly int _maxPageSize = 20;
 
-    public PictureService(AppDbContext context)
+    public PictureService(
+        AppDbContext context,
+        IHttpContextAccessor httpContextAccessor,
+        IWebHostEnvironment webHostEnvironment
+        )
     {
         _context = context;
+        _httpContextAccessor = httpContextAccessor;
+        _webHostEnvironment = webHostEnvironment;
     }
 
     public async Task<ResponseData<ListModel<Picture>>> GetPictureListAsync(string? genreNormalizedName, int pageNo = 1, int pageSize = 3)
@@ -107,10 +115,54 @@ public class PictureService : IPictureService
             };
     }
 
-    public Task<ResponseData<string>> SaveImageAsync(int id, IFormFile formFile)
+    public async Task<ResponseData<string>> SaveImageAsync(int id, IFormFile formFile)
     {
-        throw new NotImplementedException();
+        var responseData = new ResponseData<string>();
+        var picture = await _context.Pictures.FindAsync(id);
+
+        if (picture == null)
+        {
+            responseData.Success = false;
+            responseData.ErrorMessage = "No item found";
+            return responseData;
+        }
+
+        var host = "https://" + _httpContextAccessor.HttpContext?.Request.Host;
+        var imageFolder = Path.Combine(_webHostEnvironment.WebRootPath, "Images");
+
+        if (formFile != null)
+        {
+            if (!string.IsNullOrEmpty(picture.ImagePath))
+            {
+                var prevImage = Path.GetFileName(picture.ImagePath);
+                var prevImagePath = Path.Combine(imageFolder, prevImage);
+
+                if (File.Exists(prevImagePath))
+                    File.Delete(prevImagePath);
+            }
+
+
+
+            var ext = Path.GetExtension(formFile.FileName);
+            var fName = Path.ChangeExtension(Path.GetRandomFileName(), ext);
+            var filePath = Path.Combine(imageFolder, fName);
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await formFile.CopyToAsync(stream);
+            }
+
+            picture.ImagePath = $"{host}/Images/{fName}";
+            picture.ImageMimeType = formFile.ContentType;
+
+            _context.Entry(picture).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+        }
+
+        responseData.Data = picture.ImagePath;
+        return responseData;
     }
+
 
     public async Task UpdatePictureAsync(int id, Picture picture)
     {

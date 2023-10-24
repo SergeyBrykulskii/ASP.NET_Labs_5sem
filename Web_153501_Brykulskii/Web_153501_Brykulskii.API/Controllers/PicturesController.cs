@@ -84,6 +84,20 @@ public class PicturesController : ControllerBase
         });
     }
 
+    // POST: api/Dishes/5
+    [HttpPost("{id}")]
+    public async Task<ActionResult<ResponseData<string>>> PostImage(
+        int id,
+        IFormFile formFile)
+    {
+        var response = await _pictureService.SaveImageAsync(id, formFile);
+        if (response.Success)
+        {
+            return Ok(response);
+        }
+        return NotFound(response);
+    }
+
     // DELETE: api/Pictures/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeletePicture(int id)

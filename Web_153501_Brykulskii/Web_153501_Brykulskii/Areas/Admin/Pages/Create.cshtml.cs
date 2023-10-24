@@ -36,6 +36,9 @@ namespace Web_153501_Brykulskii.Areas.Admin.Pages
         [BindProperty]
         public Picture Picture { get; set; } = default!;
 
+        [BindProperty]
+        public IFormFile? Image { get; set; }
+
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
@@ -43,7 +46,7 @@ namespace Web_153501_Brykulskii.Areas.Admin.Pages
             if (!ModelState.IsValid)
                 return Page();
 
-            var response = await _pictureService.CreatePictureAsync(Picture, null);
+            var response = await _pictureService.CreatePictureAsync(Picture, Image);
 
             if (!response.Success)
                 return NotFound(response.ErrorMessage);

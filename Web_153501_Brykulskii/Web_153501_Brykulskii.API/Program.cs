@@ -16,9 +16,11 @@ public class Program
         connStr = string.Format(connStr!, dataDirectory);
 
         builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(connStr));
-        builder.Services.AddControllers();
         builder.Services.AddScoped<IPictureService, PictureService>();
         builder.Services.AddScoped<IPictureGenreService, PictureGenreService>();
+
+        builder.Services.AddControllers();
+        builder.Services.AddHttpContextAccessor();
 
         var app = builder.Build();
 
