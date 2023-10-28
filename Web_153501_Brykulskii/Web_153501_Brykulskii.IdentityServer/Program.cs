@@ -1,4 +1,4 @@
-﻿using Serilog;
+using Serilog;
 using Web_153501_Brykulskii.IdentityServer;
 
 Log.Logger = new LoggerConfiguration()
