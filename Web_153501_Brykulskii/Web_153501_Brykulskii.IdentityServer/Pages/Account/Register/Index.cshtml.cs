@@ -14,15 +14,18 @@ public class Index : PageModel
     private readonly SignInManager<ApplicationUser> _signInManager;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly ILogger<Index> _logger;
+    private readonly IWebHostEnvironment _environment;
 
     public Index(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
-        ILogger<Index> logger)
+        ILogger<Index> logger,
+        IWebHostEnvironment environment)
     {
         _userManager = userManager;
         _signInManager = signInManager;
         _logger = logger;
+        _environment = environment;
     }
 
     [BindProperty]
@@ -49,6 +52,8 @@ public class Index : PageModel
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        public IFormFile? Image { get; set; }
     }
 
     public async Task OnGetAsync(string returnUrl = null)
@@ -69,13 +74,14 @@ public class Index : PageModel
             {
                 _logger.LogInformation("User created a new account with password.");
 
-                /*var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));*/
-                /*var callbackUrl = Url.Page(
-                    "/Account/ConfirmEmail",
-                    pageHandler: null,
-                    values: new { area = "Identity", userId = user.Id, code, returnUrl },
-                    protocol: Request.Scheme);*/
+                if (Input.Image != null)
+                {
+                    await SaveImageAsync(user.Id);
+                }
+                else
+                {
+                    _logger.LogInformation("-----> Image is null");
+                }
 
                 if (_userManager.Options.SignIn.RequireConfirmedAccount)
                 {
@@ -95,5 +101,13 @@ public class Index : PageModel
 
         // If we got this far, something failed, redisplay form
         return Page();
+    }
+    private async Task SaveImageAsync(string id)
+    {
+        var ext = Path.GetExtension(Input.Image.FileName);
+        var fileName = Path.ChangeExtension(id, ext);
+        var path = Path.Combine(_environment.WebRootPath, "Images", fileName);
+        using var stream = System.IO.File.OpenWrite(path);
+        await Input.Image.CopyToAsync(stream);
     }
 }

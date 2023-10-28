@@ -68,6 +68,7 @@ internal static class HostingExtensions
             app.UseDeveloperExceptionPage();
         }
 
+        app.MapControllers();
         app.UseStaticFiles();
         app.UseRouting();
         app.UseIdentityServer();
