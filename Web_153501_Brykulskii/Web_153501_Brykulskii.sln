@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web_153501_Brykulskii.Domai
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web_153501_Brykulskii.API", "Web_153501_Brykulskii.API\Web_153501_Brykulskii.API.csproj", "{C81A00FD-68D8-4EFD-8444-40A75CF6C75E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web_153501_Brykulskii.IdentityServer", "Web_153501_Brykulskii.IdentityServer\Web_153501_Brykulskii.IdentityServer.csproj", "{6663B9FA-8E39-4F24-A2D3-CE260DC4794C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{C81A00FD-68D8-4EFD-8444-40A75CF6C75E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C81A00FD-68D8-4EFD-8444-40A75CF6C75E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C81A00FD-68D8-4EFD-8444-40A75CF6C75E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6663B9FA-8E39-4F24-A2D3-CE260DC4794C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6663B9FA-8E39-4F24-A2D3-CE260DC4794C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6663B9FA-8E39-4F24-A2D3-CE260DC4794C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6663B9FA-8E39-4F24-A2D3-CE260DC4794C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

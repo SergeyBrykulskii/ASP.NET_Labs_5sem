@@ -13,8 +13,6 @@ public class Program
         // Add services to the container.
         builder.Services.AddControllersWithViews();
         builder.Services.AddRazorPages();
-        //builder.Services.AddScoped<IPictureGenreService, MemoryPictureGenreService>();
-        //builder.Services.AddScoped<IPictureService, MemoryPictureService>();
 
         UriData.ApiUri = builder.Configuration.GetSection("UriData")[key: "ApiUri"]!;
 
@@ -24,11 +22,27 @@ public class Program
         builder.Services.AddHttpClient<IPictureGenreService, ApiPictureGenreService>(client =>
             client.BaseAddress = new Uri(UriData.ApiUri));
 
-        // to delete
-        //var connectionString = "Data Source=app.db";
-        //string dataDirectory = AppDomain.CurrentDomain.BaseDirectory + Path.DirectorySeparatorChar;
-        //connectionString = string.Format(connectionString!, dataDirectory);
-        //builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(connectionString).EnableSensitiveDataLogging());
+        builder.Services.AddHttpContextAccessor();
+
+        builder.Services.AddAuthentication(opt =>
+        {
+            opt.DefaultScheme = "cookie";
+            opt.DefaultChallengeScheme = "oidc";
+        })
+            .AddCookie("cookie")
+            .AddOpenIdConnect("oidc", options =>
+            {
+                options.Authority =
+                builder.Configuration["InteractiveServiceSettings:AuthorityUrl"];
+                options.ClientId =
+                builder.Configuration["InteractiveServiceSettings:ClientId"];
+                options.ClientSecret =
+                builder.Configuration["InteractiveServiceSettings:ClientSecret"];
+                options.GetClaimsFromUserInfoEndpoint = true;
+                options.ResponseType = "code";
+                options.ResponseMode = "query";
+                options.SaveTokens = true;
+            });
 
         var app = builder.Build();
 
@@ -45,12 +59,13 @@ public class Program
 
         app.UseRouting();
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllerRoute(
             name: "default",
             pattern: "{controller=Home}/{action=Index}/{id?}");
-        app.MapRazorPages();
+        app.MapRazorPages().RequireAuthorization();
 
         app.Run();
     }

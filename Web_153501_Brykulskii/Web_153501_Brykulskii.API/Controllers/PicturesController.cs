@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Web_153501_Brykulskii.API.Services;
 using Web_153501_Brykulskii.Domain.Entities;
 using Web_153501_Brykulskii.Domain.Models;
@@ -21,6 +22,7 @@ public class PicturesController : ControllerBase
     [Route("{genre}")]
     [Route("page{pageNo}")]
     [Route("{genre}/page{pageNo}")]
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<Picture>>> GetPictures(string? genre, int pageNo = 1, int pageSize = 3)
     {
         // check error 
@@ -29,6 +31,7 @@ public class PicturesController : ControllerBase
 
     // GET: api/Pictures/5
     [HttpGet("{id:int}")]
+    [AllowAnonymous]
     public async Task<ActionResult<Picture>> GetPicture(int id)
     {
         return Ok(await _pictureService.GetPictureByIdAsync(id));
@@ -37,6 +40,7 @@ public class PicturesController : ControllerBase
     // PUT: api/Pictures/5
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPut("{id}")]
+    [Authorize]
     public async Task<IActionResult> PutPicture(int id, Picture picture)
     {
         if (id != picture.Id)
@@ -59,6 +63,7 @@ public class PicturesController : ControllerBase
     // POST: api/Pictures
     // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
     [HttpPost]
+    [Authorize]
     public async Task<ActionResult<Picture>> PostPicture(Picture picture)
     {
         if (picture == null)
@@ -86,6 +91,7 @@ public class PicturesController : ControllerBase
 
     // POST: api/Dishes/5
     [HttpPost("{id}")]
+    [Authorize]
     public async Task<ActionResult<ResponseData<string>>> PostImage(
         int id,
         IFormFile formFile)
@@ -100,6 +106,7 @@ public class PicturesController : ControllerBase
 
     // DELETE: api/Pictures/5
     [HttpDelete("{id}")]
+    [Authorize]
     public async Task<IActionResult> DeletePicture(int id)
     {
         try

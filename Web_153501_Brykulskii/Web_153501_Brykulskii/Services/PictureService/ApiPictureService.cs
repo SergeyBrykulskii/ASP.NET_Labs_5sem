@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using Microsoft.AspNetCore.Authentication;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Text.Json;
 using Web_153501_Brykulskii.Domain.Entities;
 using Web_153501_Brykulskii.Domain.Models;
@@ -11,11 +13,13 @@ public class ApiPictureService : IPictureService
     private readonly int _pageSize;
     private readonly JsonSerializerOptions _serializerOptions;
     private readonly ILogger<ApiPictureService> _logger;
+    private readonly HttpContext _httpContext;
 
     public ApiPictureService(
         HttpClient httpClient,
         IConfiguration configuration,
-        ILogger<ApiPictureService> logger)
+        ILogger<ApiPictureService> logger,
+        IHttpContextAccessor httpContextAccessor)
     {
         _httpClient = httpClient;
         _pageSize = configuration.GetValue<int>("ItemsPerPage");
@@ -24,11 +28,16 @@ public class ApiPictureService : IPictureService
             PropertyNamingPolicy = JsonNamingPolicy.CamelCase
         };
         _logger = logger;
+        _httpContext = httpContextAccessor.HttpContext!;
     }
 
     public async Task<ResponseData<Picture>> CreatePictureAsync(Picture picture, IFormFile? formFile)
     {
         var uri = new Uri($"{_httpClient.BaseAddress!.AbsoluteUri}Pictures");
+
+        var token = await _httpContext.GetTokenAsync("access_token");
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+
         var response = await _httpClient.PostAsJsonAsync(uri, picture, _serializerOptions);
 
         if (response.IsSuccessStatusCode)
@@ -58,6 +67,9 @@ public class ApiPictureService : IPictureService
     public async Task<ResponseData<ListModel<Picture>>> GetPictureListAsync(string? genreNormalizedName, int pageNo = 1)
     {
         var urlString = new StringBuilder($"{_httpClient.BaseAddress!.AbsoluteUri}Pictures/");
+
+        var token = await _httpContext.GetTokenAsync("access_token");
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
 
         if (genreNormalizedName != null)
             urlString.Append($"{genreNormalizedName}/");
@@ -102,6 +114,9 @@ public class ApiPictureService : IPictureService
     {
         var uri = new Uri($"{_httpClient.BaseAddress!.AbsoluteUri}Pictures/{id}");
 
+        var token = await _httpContext.GetTokenAsync("access_token");
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+
         var response = await _httpClient.DeleteAsync(uri);
 
         if (!response.IsSuccessStatusCode)
@@ -113,6 +128,9 @@ public class ApiPictureService : IPictureService
     public async Task<ResponseData<Picture>> GetPictureByIdAsync(int id)
     {
         var uri = new Uri($"{_httpClient.BaseAddress!.AbsoluteUri}Pictures/{id}");
+
+        var token = await _httpContext.GetTokenAsync("access_token");
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
 
         var response = await _httpClient.GetAsync(uri);
 
@@ -148,6 +166,9 @@ public class ApiPictureService : IPictureService
     {
         var uri = new Uri($"{_httpClient.BaseAddress!.AbsoluteUri}Pictures/{id}");
 
+        var token = await _httpContext.GetTokenAsync("access_token");
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
+
         var response = await _httpClient.PutAsync(uri, new StringContent(JsonSerializer.Serialize(picture), Encoding.UTF8, "application/json"));
 
         if (response.IsSuccessStatusCode)
@@ -167,6 +188,9 @@ public class ApiPictureService : IPictureService
             Method = HttpMethod.Post,
             RequestUri = new Uri($"{_httpClient.BaseAddress!.AbsoluteUri}Dishes/{id}")
         };
+
+        var token = await _httpContext.GetTokenAsync("access_token");
+        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("bearer", token);
 
         var content = new MultipartFormDataContent();
         var streamContent = new StreamContent(image.OpenReadStream());

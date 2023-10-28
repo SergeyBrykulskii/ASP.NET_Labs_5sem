@@ -13,6 +13,7 @@ namespace Web_153501_Brykulskii.IdentityServer
         {
             builder.Services.AddRazorPages();
 
+            //builder.Services.AddControllers();
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
