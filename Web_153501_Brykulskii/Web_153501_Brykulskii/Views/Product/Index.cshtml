@@ -40,25 +40,14 @@
     </ul>
 </div>
 
-<div class="row offset-2">
-    @foreach (var item in Model.pictures) {
-        <div class="col-md-4 mb-4">
-            <div class="card" style="width: 18rem;">
-                <div class="image-container">
-                    <img src="@item.ImagePath" class="card-img-top" alt="@item.Name">
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">@item.Name</h5>
-                    <p class="card-text">@item.Description</p>
-                    <p class="card-text">Цена: @item.Price$</p>
-                    <a asp-controller="Cart" asp-action="Add" asp-route-id="@item.Id" asp-route-returnUrl=@returnUrl class="btn btn-primary">Add to cart</a>
-                </div>
-            </div>
-        </div>
-    }
-</div>
-
-<pager current-page="@Model.currentPage"
-       total-pages="@Model.totalPages"
-       genre=@genre>
-</pager>
+@{
+    await Html.RenderPartialAsync("Partials/_PictureListPartial", new
+    {
+        Pictures = Model.pictures,
+        Genre = genre,
+        CurrentPage = Model.currentPage,
+        TotalPages = Model.totalPages,
+        ReturnUrl = returnUrl,
+        IsAdmin = false 
+    });
+}

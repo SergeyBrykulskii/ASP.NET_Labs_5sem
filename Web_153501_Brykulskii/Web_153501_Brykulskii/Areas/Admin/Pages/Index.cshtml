@@ -10,57 +10,13 @@
 <p>
     <a asp-page="Create">Create New</a>
 </p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Pictures[0].Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Pictures[0].Author)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Pictures[0].Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Pictures[0].Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Pictures[0].ImagePath)
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.Pictures) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Author)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                <div class="image-container">
-                    <img src="@item.ImagePath" class="card-img-top" alt="@item.Name">
-                </div>
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
 
-<pager current-page="@Model.CurrentPage"
-       total-pages="@Model.TotalPages"
-       admin="true">
-</pager>
+@{
+    await Html.RenderPartialAsync("Partials/_PictureListPartial", new
+    {
+        Pictures = Model.Pictures,
+        CurrentPage = Model.CurrentPage,
+        TotalPages = Model.TotalPages,
+        IsAdmin = true
+    });
+}
