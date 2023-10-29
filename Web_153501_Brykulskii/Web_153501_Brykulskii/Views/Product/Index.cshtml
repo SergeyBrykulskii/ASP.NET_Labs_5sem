@@ -58,28 +58,7 @@
     }
 </div>
 
-<nav aria-label="...">
-    <ul class="pagination">
-        <li class="page-item">
-            <a class="page-link" href="@Url.Action("Index", "Product", new { genre = genre, pageNo = prev })"
-                tabindex="-1" aria-disabled="true">
-                Previous
-            </a>
-        </li>
-        @for (int i = 1; i <= Model.totalPages; i++)
-        {
-            <li class="page-item @(Model.currentPage == i ? "active" : "")" aria-current="page">
-                <a class="page-link" href="@Url.Action("Index", "Product", new { genre = genre, pageNo = i })"
-                    tabindex="-1" aria-disabled="true">
-                    @i
-                </a>
-            </li>
-        }
-        <li class="page-item">
-            <a class="page-link" href="@Url.Action("Index", "Product", new { genre = genre, pageNo = next })"
-                tabindex="-1" aria-disabled="true">
-                Next
-            </a>
-        </li>
-    </ul>
-</nav>
+<pager current-page="@Model.currentPage"
+       total-pages="@Model.totalPages"
+       genre=@genre>
+</pager>
