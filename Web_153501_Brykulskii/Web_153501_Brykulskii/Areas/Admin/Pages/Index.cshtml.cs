@@ -14,6 +14,8 @@ namespace Web_153501_Brykulskii.Areas.Admin.Pages
         }
 
         public IList<Picture> Pictures { get; set; } = default!;
+        public int CurrentPage { get; set; }
+        public int TotalPages { get; set; }
 
         public async Task OnGetAsync(int pageNo = 1)
         {
@@ -22,6 +24,8 @@ namespace Web_153501_Brykulskii.Areas.Admin.Pages
             if (response.Success)
             {
                 Pictures = response.Data!.Items!;
+                CurrentPage = response.Data.CurrentPage;
+                TotalPages = response.Data.TotalPages;
             }
         }
     }
