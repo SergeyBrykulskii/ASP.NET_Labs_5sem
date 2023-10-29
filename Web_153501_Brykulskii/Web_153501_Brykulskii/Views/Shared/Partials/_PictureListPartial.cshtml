@@ -1,42 +1,46 @@
-﻿<div class="row offset-2">
-	@foreach (var item in Model.Pictures)
-	{
-		<div class="col-md-4 mb-4">
-			<div class="card" style="width: 18rem;">
-				<div class="image-container">
-					<img src="@item.ImagePath" class="card-img-top" alt="@item.Name">
-				</div>
-				<div class="card-body">
-					<h5 class="card-title">@item.Name</h5>
-					<p class="card-text">@item.Description</p>
-					<p class="card-text">Цена: @item.Price$</p>
-					@if (Model.IsAdmin)
-					{
-						<a asp-page="./Edit" asp-route-id="@item.Id">Edit</a>
-						<a asp-page="./Details" asp-route-id="@item.Id">Details</a>
-						<a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
-					}
-					else
-					{
-						<a asp-controller="Cart" asp-action="Add" asp-route-id="@item.Id" asp-route-returnUrl=@Model.ReturnUrl class="btn btn-primary">Add to cart</a>
-					}
+﻿<div id="picture-list">
+	<div class="row offset-2">
+		@foreach (var item in Model.Pictures)
+		{
+			<div class="col-md-4 mb-4">
+				<div class="card" style="width: 18rem;">
+					<div class="image-container">
+						<img src="@item.ImagePath" class="card-img-top" alt="@item.Name">
+					</div>
+					<div class="card-body">
+						<h5 class="card-title">@item.Name</h5>
+						<p class="card-text">@item.Description</p>
+						<p class="card-text">Цена: @item.Price$</p>
+						@if (Model.IsAdmin)
+						{
+							<a asp-page="./Edit" asp-route-id="@item.Id">Edit</a>
+							<a asp-page="./Details" asp-route-id="@item.Id">Details</a>
+							<a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+						}
+						else
+						{
+							<a asp-controller="Cart" asp-action="Add" asp-route-id="@item.Id" asp-route-returnUrl=@Model.ReturnUrl class="btn btn-primary">Add to cart</a>
+						}
+					</div>
 				</div>
 			</div>
-		</div>
+		}
+	</div>
+
+	@if (Model.IsAdmin)
+	{
+		<pager current-page="@Model.CurrentPage"
+			   total-pages="@Model.TotalPages"
+			   admin="true">
+		</pager>
+	}
+	else
+	{
+		<pager current-page="@Model.CurrentPage"
+			   total-pages="@Model.TotalPages"
+			   genre=@Model.Genre>
+		</pager>
 	}
 </div>
 
-@if (Model.IsAdmin)
-{
-	<pager current-page="@Model.CurrentPage"
-		   total-pages="@Model.TotalPages"
-		   admin="true">
-	</pager>
-}
-else
-{
-	<pager current-page="@Model.CurrentPage"
-		   total-pages="@Model.TotalPages"
-		   genre=@Model.Genre>
-	</pager>
-}
+<script src="~/js/site.js"></script>
