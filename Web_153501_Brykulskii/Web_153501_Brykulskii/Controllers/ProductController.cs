@@ -18,6 +18,9 @@ public class ProductController : Controller
 		_pictureGenreService = pictureGenreService;
 		_pictureService = pictureService;
 	}
+
+	[Route("Gallery")]
+	[Route("Gallery/{genre?}")]
 	public async Task<IActionResult> Index(string? genre, int pageNo = 1)
 	{
 		var genresResponse = await _pictureGenreService.GetPictureGenreListAsync();

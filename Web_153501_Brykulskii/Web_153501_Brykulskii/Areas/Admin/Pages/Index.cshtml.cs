@@ -6,6 +6,7 @@ using Web_153501_Brykulskii.Services.PictureService;
 
 namespace Web_153501_Brykulskii.Areas.Admin.Pages
 {
+	//[Authorize(Roles = "Admin")]
 	public class IndexModel : PageModel
 	{
 		private readonly IPictureService _pictureService;
