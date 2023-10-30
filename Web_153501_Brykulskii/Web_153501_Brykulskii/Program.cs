@@ -14,6 +14,7 @@ public class Program
 		// Add services to the container.
 		builder.Services.AddControllersWithViews();
 		builder.Services.AddRazorPages();
+		builder.Services.AddDistributedMemoryCache();
 		builder.Services.AddSession();
 		builder.Services.AddScoped(SessionCart.GetCart);
 		builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
@@ -63,9 +64,9 @@ public class Program
 
 		app.UseRouting();
 
+		app.UseSession();
 		app.UseAuthentication();
 		app.UseAuthorization();
-		app.UseSession();
 
 		app.MapControllerRoute(
 			name: "default",

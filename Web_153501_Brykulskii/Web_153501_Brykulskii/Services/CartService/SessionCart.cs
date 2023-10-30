@@ -24,7 +24,7 @@ public class SessionCart : Cart
 		base.Clear();
 		Session?.Remove("Cart");
 	}
-	public static SessionCart GetCart(IServiceProvider services)
+	public static Cart GetCart(IServiceProvider services)
 	{
 		var session = services.GetRequiredService<IHttpContextAccessor>().HttpContext?.Session;
 		var cart = session?.Get<SessionCart>("Cart") ?? new SessionCart();

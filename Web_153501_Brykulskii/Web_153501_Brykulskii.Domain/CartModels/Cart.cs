@@ -31,7 +31,7 @@ public class Cart
 		CartItems.Clear();
 	}
 
-	public int Quontity => CartItems.Sum(item => item.Value.Quantity);
+	public int Quantity => CartItems.Sum(item => item.Value.Quantity);
 
 	public decimal TotalPrice => (decimal)CartItems.Sum(item => item.Value.Picture.Price * item.Value.Quantity)!;
 }
