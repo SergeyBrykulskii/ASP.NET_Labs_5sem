@@ -33,6 +33,8 @@ public class ProductController : Controller
 
 		ViewData["genres"] = genresResponse.Data;
 		ViewData["currentGenre"] = GenreConverter.ConvertToRu(genre);
+		ViewData["currentPage"] = pictureResponse.Data!.CurrentPage;
+		ViewData["totalPages"] = pictureResponse.Data.TotalPages;
 
 		if (Request.isAjaxRequest())
 		{
@@ -47,6 +49,6 @@ public class ProductController : Controller
 			});
 		}
 
-		return View((pictureResponse.Data!.Items, pictureResponse.Data.CurrentPage, pictureResponse.Data.TotalPages));
+		return View(pictureResponse.Data!.Items);
 	}
 }

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Security.Claims;
 using Web_153501_Brykulskii.Domain.Entities;
 using Web_153501_Brykulskii.Extensions;
 using Web_153501_Brykulskii.Services.PictureService;
@@ -10,10 +11,14 @@ namespace Web_153501_Brykulskii.Areas.Admin.Pages
 	public class IndexModel : PageModel
 	{
 		private readonly IPictureService _pictureService;
+		private readonly ILogger<IndexModel> logger;
+		//private readonly UserManager<IdentityUser> userManager;
 
-		public IndexModel(IPictureService pictureService)
+		public IndexModel(IPictureService pictureService, ILogger<IndexModel> logger)
 		{
 			_pictureService = pictureService;
+			this.logger = logger;
+			//this.userManager = userManager;
 		}
 
 		public IList<Picture> Pictures { get; set; } = default!;
@@ -23,6 +28,9 @@ namespace Web_153501_Brykulskii.Areas.Admin.Pages
 		public async Task<IActionResult> OnGetAsync(int pageNo = 1)
 		{
 			var response = await _pictureService.GetPictureListAsync(null, pageNo);
+			//var user = userManager.GetUserAsync(User);
+			logger.LogInformation($"-------> isAdmin : {User.FindFirst(ClaimTypes.Role)}");
+
 
 			if (response.Success)
 			{

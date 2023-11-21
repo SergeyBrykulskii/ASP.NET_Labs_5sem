@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.OAuth.Claims;
 using Web_153501_Brykulskii.Models;
 using Web_153501_Brykulskii.Services.CartService;
 using Web_153501_Brykulskii.Services.PictureGenreService;
@@ -47,6 +48,13 @@ public class Program
 				options.ResponseType = "code";
 				options.ResponseMode = "query";
 				options.SaveTokens = true;
+
+				options.ClaimActions.Add(new JsonKeyClaimAction("role", null, "role"));
+				options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
+				{
+					NameClaimType = "name",
+					RoleClaimType = "role"
+				};
 			});
 
 		var app = builder.Build();

@@ -1,14 +1,16 @@
-﻿@model (List<Picture> pictures, int currentPage, int totalPages)
+﻿@model List<Picture> 
 @{
     ViewData["Title"] = "Каталог";
+    var currentPage = ViewData["currentPage"] as int? ?? 1;
+    var totalPages = ViewData["totalPages"] as int? ?? 1;
     var request = ViewContext.HttpContext.Request;
     var returnUrl = request.Path + request.QueryString.ToUriComponent();
     var genres = ViewData["genres"] as IEnumerable<PictureGenre>;
     string? genre = request.Query["genre"];
     var currentGenre = ViewData["currentGenre"] as string ?? "Все";
 
-    int prev = Model.currentPage == 1 ? 1 : Model.currentPage - 1;
-    int next = Model.currentPage == Model.totalPages ? Model.totalPages : Model.currentPage + 1;
+    int prev = currentPage == 1 ? 1 : currentPage - 1;
+    int next = currentPage == totalPages ? totalPages : currentPage + 1;
 }
 
 <h1>Каталог</h1>
@@ -43,10 +45,10 @@
 @{
     await Html.RenderPartialAsync("Partials/_PictureListPartial", new
     {
-        Pictures = Model.pictures,
+        Pictures = Model,
         Genre = genre,
-        CurrentPage = Model.currentPage,
-        TotalPages = Model.totalPages,
+        CurrentPage = currentPage,
+        TotalPages = totalPages,
         ReturnUrl = returnUrl,
         IsAdmin = false 
     });
