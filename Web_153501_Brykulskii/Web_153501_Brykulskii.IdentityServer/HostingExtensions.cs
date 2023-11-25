@@ -56,6 +56,16 @@ internal static class HostingExtensions
 				options.ClientSecret = "copy client secret from Google here";
 			});
 
+		builder.Services.AddCors(options =>
+		{
+			options.AddPolicy("BlazorWasmPolicy", builder =>
+			{
+				builder.WithOrigins("https://localhost:7004")
+					.AllowAnyHeader()
+					.AllowAnyMethod();
+			});
+		});
+
 		return builder.Build();
 	}
 
@@ -71,6 +81,7 @@ internal static class HostingExtensions
 		app.MapControllers();
 		app.UseStaticFiles();
 		app.UseRouting();
+		app.UseCors("BlazorWasmPolicy");
 		app.UseIdentityServer();
 		app.UseAuthorization();
 
