@@ -1,4 +1,6 @@
 using Microsoft.AspNetCore.Authentication.OAuth.Claims;
+using Serilog;
+using Web_153501_Brykulskii.Middleware;
 using Web_153501_Brykulskii.Models;
 using Web_153501_Brykulskii.Services.CartService;
 using Web_153501_Brykulskii.Services.PictureGenreService;
@@ -57,6 +59,8 @@ public class Program
 				};
 			});
 
+		var logger = new LoggerConfiguration().ReadFrom.Configuration(builder.Configuration).CreateLogger();
+
 		var app = builder.Build();
 
 		// Configure the HTTP request pipeline.
@@ -80,6 +84,8 @@ public class Program
 			name: "default",
 			pattern: "{controller=Home}/{action=Index}/{id?}");
 		app.MapRazorPages().RequireAuthorization();
+
+		app.UseMiddleware<LoggingMiddleware>(logger);
 
 		app.Run();
 	}
