@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Web_153501_Brykulskii.API.Data;
 using Web_153501_Brykulskii.API.Services;
@@ -16,9 +17,23 @@ public class Program
         connStr = string.Format(connStr!, dataDirectory);
 
         builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlite(connStr));
-        builder.Services.AddControllers();
         builder.Services.AddScoped<IPictureService, PictureService>();
         builder.Services.AddScoped<IPictureGenreService, PictureGenreService>();
+
+        builder.Services.AddControllers();
+        builder.Services.AddHttpContextAccessor();
+
+        builder.Services
+            .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(opt =>
+            {
+                opt.Authority = builder
+                .Configuration
+                .GetSection("isUri").Value;
+                opt.TokenValidationParameters.ValidateAudience = false;
+                opt.TokenValidationParameters.ValidTypes =
+                new[] { "at+jwt" };
+            });
 
         var app = builder.Build();
 
@@ -27,6 +42,7 @@ public class Program
         app.UseHttpsRedirection();
         app.UseStaticFiles();
 
+        app.UseAuthentication();
         app.UseAuthorization();
 
         app.MapControllers();

@@ -1,0 +1,22 @@
+﻿@page
+@model Web_153501_Brykulskii.Areas.Admin.Pages.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-page="Create">Create New</a>
+</p>
+
+@{
+    await Html.RenderPartialAsync("Partials/_PictureListPartial", new
+    {
+        Pictures = Model.Pictures,
+        CurrentPage = Model.CurrentPage,
+        TotalPages = Model.TotalPages,
+        IsAdmin = true
+    });
+}

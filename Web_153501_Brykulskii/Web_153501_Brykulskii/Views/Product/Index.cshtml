@@ -1,14 +1,16 @@
-﻿@model (List<Picture> pictures, int currentPage, int totalPages)
+@model List<Picture> 
 @{
     ViewData["Title"] = "Каталог";
+    var currentPage = ViewData["currentPage"] as int? ?? 1;
+    var totalPages = ViewData["totalPages"] as int? ?? 1;
     var request = ViewContext.HttpContext.Request;
     var returnUrl = request.Path + request.QueryString.ToUriComponent();
     var genres = ViewData["genres"] as IEnumerable<PictureGenre>;
     string? genre = request.Query["genre"];
     var currentGenre = ViewData["currentGenre"] as string ?? "Все";
 
-    int prev = Model.currentPage == 1 ? 1 : Model.currentPage - 1;
-    int next = Model.currentPage == Model.totalPages ? Model.totalPages : Model.currentPage + 1;
+    int prev = currentPage == 1 ? 1 : currentPage - 1;
+    int next = currentPage == totalPages ? totalPages : currentPage + 1;
 }
 
 <h1>Каталог</h1>
@@ -40,46 +42,14 @@
     </ul>
 </div>
 
-<div class="row offset-2">
-    @foreach (var item in Model.pictures) {
-        <div class="col-md-4 mb-4">
-            <div class="card" style="width: 18rem;">
-                <div class="image-container">
-                    <img src="@item.ImagePath" class="card-img-top" alt="@item.Name">
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">@item.Name</h5>
-                    <p class="card-text">@item.Description</p>
-                    <p class="card-text">Цена: @item.Price$</p>
-                    <a asp-controller="Cart" asp-action="Add" asp-route-id="@item.Id" asp-route-returnUrl=@returnUrl class="btn btn-primary">Add to cart</a>
-                </div>
-            </div>
-        </div>
-    }
-</div>
-
-<nav aria-label="...">
-    <ul class="pagination">
-        <li class="page-item">
-            <a class="page-link" href="@Url.Action("Index", "Product", new { genre = genre, pageNo = prev })"
-                tabindex="-1" aria-disabled="true">
-                Previous
-            </a>
-        </li>
-        @for (int i = 1; i <= Model.totalPages; i++)
-        {
-            <li class="page-item @(Model.currentPage == i ? "active" : "")" aria-current="page">
-                <a class="page-link" href="@Url.Action("Index", "Product", new { genre = genre, pageNo = i })"
-                    tabindex="-1" aria-disabled="true">
-                    @i
-                </a>
-            </li>
-        }
-        <li class="page-item">
-            <a class="page-link" href="@Url.Action("Index", "Product", new { genre = genre, pageNo = next })"
-                tabindex="-1" aria-disabled="true">
-                Next
-            </a>
-        </li>
-    </ul>
-</nav>
+@{
+    await Html.RenderPartialAsync("Partials/_PictureListPartial", new
+    {
+        Pictures = Model,
+        Genre = genre,
+        CurrentPage = currentPage,
+        TotalPages = totalPages,
+        ReturnUrl = returnUrl,
+        IsAdmin = false 
+    });
+}

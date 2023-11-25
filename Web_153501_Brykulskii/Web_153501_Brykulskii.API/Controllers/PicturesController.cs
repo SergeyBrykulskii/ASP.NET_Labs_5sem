@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Web_153501_Brykulskii.API.Services;
 using Web_153501_Brykulskii.Domain.Entities;
+using Web_153501_Brykulskii.Domain.Models;
 
 namespace Web_153501_Brykulskii.API.Controllers;
 
@@ -20,98 +22,107 @@ public class PicturesController : ControllerBase
     [Route("{genre}")]
     [Route("page{pageNo}")]
     [Route("{genre}/page{pageNo}")]
+    [AllowAnonymous]
     public async Task<ActionResult<IEnumerable<Picture>>> GetPictures(string? genre, int pageNo = 1, int pageSize = 3)
     {
         // check error 
         return Ok(await _pictureService.GetPictureListAsync(genre, pageNo, pageSize));
     }
 
-    //// GET: api/Pictures/5
-    //[HttpGet("{id}")]
-    //public async Task<ActionResult<Picture>> GetPicture(int? id)
-    //{
-    //  if (_pictureService.Pictures == null)
-    //  {
-    //      return NotFound();
-    //  }
-    //    var picture = await _pictureService.Pictures.FindAsync(id);
+    // GET: api/Pictures/5
+    [HttpGet("{id:int}")]
+    [AllowAnonymous]
+    public async Task<ActionResult<Picture>> GetPicture(int id)
+    {
+        return Ok(await _pictureService.GetPictureByIdAsync(id));
+    }
 
-    //    if (picture == null)
-    //    {
-    //        return NotFound();
-    //    }
+    // PUT: api/Pictures/5
+    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+    [HttpPut("{id}")]
+    [Authorize]
+    public async Task<IActionResult> PutPicture(int id, Picture picture)
+    {
+        if (id != picture.Id)
+        {
+            return BadRequest();
+        }
 
-    //    return picture;
-    //}
+        try
+        {
+            await _pictureService.UpdatePictureAsync(id, picture);
+        }
+        catch (Exception e)
+        {
+            return NotFound(e.Message);
+        }
 
-    //// PUT: api/Pictures/5
-    //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    //[HttpPut("{id}")]
-    //public async Task<IActionResult> PutPicture(int? id, Picture picture)
-    //{
-    //    if (id != picture.Id)
-    //    {
-    //        return BadRequest();
-    //    }
+        return NoContent();
+    }
 
-    //    _pictureService.Entry(picture).State = EntityState.Modified;
+    // POST: api/Pictures
+    // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+    [HttpPost]
+    [Authorize]
+    public async Task<ActionResult<Picture>> PostPicture(Picture picture)
+    {
+        if (picture == null)
+        {
+            return BadRequest();
+        }
+        var response = await _pictureService.CreatePictureAsync(picture);
+        if (!response.Success)
+        {
+            return BadRequest(new ResponseData<Picture>()
+            {
+                Data = null,
+                Success = false,
+                ErrorMessage = response.ErrorMessage
+            });
+        }
 
-    //    try
-    //    {
-    //        await _pictureService.SaveChangesAsync();
-    //    }
-    //    catch (DbUpdateConcurrencyException)
-    //    {
-    //        if (!PictureExists(id))
-    //        {
-    //            return NotFound();
-    //        }
-    //        else
-    //        {
-    //            throw;
-    //        }
-    //    }
 
-    //    return NoContent();
-    //}
+        return CreatedAtAction("GetPicture", new { id = picture.Id }, new ResponseData<Picture>()
+        {
+            Data = picture,
+            Success = true,
+        });
+    }
 
-    //// POST: api/Pictures
-    //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-    //[HttpPost]
-    //public async Task<ActionResult<Picture>> PostPicture(Picture picture)
-    //{
-    //  if (_pictureService.Pictures == null)
-    //  {
-    //      return Problem("Entity set 'AppDbContext.Pictures'  is null.");
-    //  }
-    //    _pictureService.Pictures.Add(picture);
-    //    await _pictureService.SaveChangesAsync();
+    // POST: api/Dishes/5
+    [HttpPost("{id}")]
+    [Authorize]
+    public async Task<ActionResult<ResponseData<string>>> PostImage(
+        int id,
+        IFormFile formFile)
+    {
+        var response = await _pictureService.SaveImageAsync(id, formFile);
+        if (response.Success)
+        {
+            return Ok(response);
+        }
+        return NotFound(response);
+    }
 
-    //    return CreatedAtAction("GetPicture", new { id = picture.Id }, picture);
-    //}
+    // DELETE: api/Pictures/5
+    [HttpDelete("{id}")]
+    [Authorize]
+    public async Task<IActionResult> DeletePicture(int id)
+    {
+        try
+        {
+            await _pictureService.DeletePictureAsync(id);
+        }
+        catch (Exception e)
+        {
+            return NotFound(new ResponseData<Picture>()
+            {
+                Data = null,
+                Success = false,
+                ErrorMessage = e.Message
+            });
+        }
 
-    //// DELETE: api/Pictures/5
-    //[HttpDelete("{id}")]
-    //public async Task<IActionResult> DeletePicture(int? id)
-    //{
-    //    if (_pictureService.Pictures == null)
-    //    {
-    //        return NotFound();
-    //    }
-    //    var picture = await _pictureService.Pictures.FindAsync(id);
-    //    if (picture == null)
-    //    {
-    //        return NotFound();
-    //    }
-
-    //    _pictureService.Pictures.Remove(picture);
-    //    await _pictureService.SaveChangesAsync();
-
-    //    return NoContent();
-    //}
-
-    //private bool PictureExists(int? id)
-    //{
-    //    return (_pictureService.Pictures?.Any(e => e.Id == id)).GetValueOrDefault();
-    //}
+        return NoContent();
+    }
 }

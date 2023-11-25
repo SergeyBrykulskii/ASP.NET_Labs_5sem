@@ -1,4 +1,4 @@
-﻿using System.Text.Json;
+using System.Text.Json;
 using Web_153501_Brykulskii.Domain.Entities;
 using Web_153501_Brykulskii.Domain.Models;
 using Web_153501_Brykulskii.Services.PictureService;
@@ -13,7 +13,6 @@ public class ApiPictureGenreService : IPictureGenreService
 
     public ApiPictureGenreService(
         HttpClient httpClient,
-        IConfiguration configuration,
         ILogger<ApiPictureService> logger)
     {
         _httpClient = httpClient;
@@ -23,8 +22,37 @@ public class ApiPictureGenreService : IPictureGenreService
         };
         _logger = logger;
     }
-    public Task<ResponseData<List<PictureGenre>>> GetPictureGenreListAsync()
+    public async Task<ResponseData<List<PictureGenre>>> GetPictureGenreListAsync()
     {
-        throw new NotImplementedException();
+        var urlString = $"{_httpClient.BaseAddress!.AbsoluteUri}PictureGenres/";
+
+        var response = await _httpClient.GetAsync(new Uri(urlString.ToString()));
+
+        if (response.IsSuccessStatusCode)
+        {
+            try
+            {
+                return await response
+                .Content
+                .ReadFromJsonAsync<ResponseData<List<PictureGenre>>>
+                (_serializerOptions);
+            }
+            catch (JsonException ex)
+            {
+                _logger.LogError($"-----> Ошибка: {ex.Message}");
+                return new ResponseData<List<PictureGenre>>
+                {
+                    Success = false,
+                    ErrorMessage = $"Ошибка: {ex.Message}"
+                };
+            }
+        }
+
+        _logger.LogError($"-----> Данные не получены от сервера. Error:{response.StatusCode}");
+        return new ResponseData<List<PictureGenre>>
+        {
+            Success = false,
+            ErrorMessage = $"Данные не получены от сервера. Error: {response.StatusCode}"
+        };
     }
 }
