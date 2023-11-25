@@ -6,8 +6,8 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Web_153501_Brykulskii.IdentityServer.Models
 {
-    // Add profile data for application users by adding properties to the ApplicationUser class
-    public class ApplicationUser : IdentityUser
-    {
-    }
+	// Add profile data for application users by adding properties to the ApplicationUser class
+	public class ApplicationUser : IdentityUser
+	{
+	}
 }

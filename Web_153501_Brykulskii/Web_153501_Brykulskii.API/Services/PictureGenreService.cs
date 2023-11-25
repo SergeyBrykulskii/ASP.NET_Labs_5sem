@@ -6,32 +6,32 @@ namespace Web_153501_Brykulskii.API.Services;
 
 public class PictureGenreService : IPictureGenreService
 {
-    private readonly AppDbContext _context;
+	private readonly AppDbContext _context;
 
-    public PictureGenreService(AppDbContext context)
-    {
-        _context = context;
-    }
+	public PictureGenreService(AppDbContext context)
+	{
+		_context = context;
+	}
 
-    public Task<ResponseData<List<PictureGenre>>> GetPictureGenreListAsync()
-    {
-        var genres = _context.Genres.ToList();
+	public Task<ResponseData<List<PictureGenre>>> GetPictureGenreListAsync()
+	{
+		var genres = _context.Genres.ToList();
 
-        if (genres == null)
-        {
-            return Task.FromResult(new ResponseData<List<PictureGenre>>
-            {
-                Success = false,
-                ErrorMessage = "Genres not found"
-            });
-        }
+		if (genres == null)
+		{
+			return Task.FromResult(new ResponseData<List<PictureGenre>>
+			{
+				Success = false,
+				ErrorMessage = "Genres not found"
+			});
+		}
 
-        var result = new ResponseData<List<PictureGenre>>
-        {
-            Data = genres,
-            Success = true,
-        };
+		var result = new ResponseData<List<PictureGenre>>
+		{
+			Data = genres,
+			Success = true,
+		};
 
-        return Task.FromResult(result);
-    }
+		return Task.FromResult(result);
+	}
 }

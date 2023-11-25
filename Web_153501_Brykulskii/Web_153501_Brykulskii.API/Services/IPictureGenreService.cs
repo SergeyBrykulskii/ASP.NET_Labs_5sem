@@ -5,5 +5,5 @@ namespace Web_153501_Brykulskii.API.Services;
 
 public interface IPictureGenreService
 {
-    public Task<ResponseData<List<PictureGenre>>> GetPictureGenreListAsync();
+	public Task<ResponseData<List<PictureGenre>>> GetPictureGenreListAsync();
 }
