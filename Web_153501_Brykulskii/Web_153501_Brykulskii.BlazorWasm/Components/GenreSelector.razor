@@ -1,0 +1,33 @@
+﻿<select class="form-select" @onchange="GenreHasChanged">
+	<option value="">Все</option>
+	@if (DataService.Genres != null)
+	{
+		@foreach (var genre in DataService.Genres)
+		{
+			<option value="@genre.NormalizedName">@genre.Name</option>
+		}
+	}
+</select>
+
+@code {
+	[Inject]
+	public IDataService DataService { get; set; }
+
+	[Inject]
+	public NavigationManager NavigationManager { get; set; }
+
+	[Parameter]
+	public string? SelectedGenre { get; set; }
+
+	protected override async Task OnInitializedAsync()
+	{
+		await DataService.GetGenreListAsync();
+	}
+
+	private void GenreHasChanged(ChangeEventArgs args)
+	{
+		SelectedGenre = args.Value?.ToString();
+		NavigationManager.NavigateTo($"pictures/{SelectedGenre}");
+	}
+
+}

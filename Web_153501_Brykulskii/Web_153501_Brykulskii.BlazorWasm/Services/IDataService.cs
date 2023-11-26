@@ -13,7 +13,7 @@ public interface IDataService
 
     public event Action? OnPicturesChange;
 
-    public Task GetPicturesListAsync(string? categoryNormalizedName, int pageNo = 1);
+    public Task GetPicturesListAsync(string? genreNormalizedName, int pageNo = 1);
     public Task<Picture?> GetPictureByIdAsync(int id);
     public Task GetGenreListAsync();
 }

@@ -1,0 +1,38 @@
+﻿@page "/pictures"
+@page "/pictures/{genre}"
+@using Web_153501_Brykulskii.BlazorWasm.Components
+
+<PageTitle>Pictures</PageTitle>
+<GenreSelector/>
+<PicturesList/>
+
+@code {
+    [Inject]
+    public IDataService DataService { get; set; }
+
+    [Parameter]
+    public string Genre { get; set; }
+
+    public string? SelectedGenre { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        await DataService.GetPicturesListAsync(null);
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        await DataService.GetPicturesListAsync(Genre);
+
+        if (Genre != null)
+        {
+            SelectedGenre = DataService?.Genres?.FirstOrDefault(c => c.NormalizedName.Equals(Genre))?.Name;
+        }
+        else
+        {
+            SelectedGenre = "Все";
+        }
+
+    }
+}

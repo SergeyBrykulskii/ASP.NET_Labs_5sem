@@ -43,15 +43,15 @@ public class DataService : IDataService
         {
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
         }
-        var uri = _httpClient.BaseAddress?.AbsoluteUri + "genres/";
-        var response = _httpClient.GetAsync(uri);
+        var uri = _httpClient.BaseAddress?.AbsoluteUri + "PictureGenres/";
+        var response = await _httpClient.GetAsync(uri);
 
-        if (response.Result.IsSuccessStatusCode)
+        if (response.IsSuccessStatusCode)
         {
             try
             {
-                var genres = await response.Result.Content.ReadFromJsonAsync<List<PictureGenre>>(_jsonSerializerOptions);
-                Genres = genres;
+                var genres = await response.Content.ReadFromJsonAsync<ResponseData<List<PictureGenre>>>(_jsonSerializerOptions);
+                Genres = genres.Data;
                 Success = true;
             }
             catch (JsonException ex)
@@ -75,14 +75,14 @@ public class DataService : IDataService
             _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Value);
         }
         var uri = _httpClient.BaseAddress?.AbsoluteUri + $"pictures/{id}";
-        var response = _httpClient.GetAsync(uri);
+        var response = await _httpClient.GetAsync(uri);
 
-        if (response.Result.IsSuccessStatusCode)
+        if (response.IsSuccessStatusCode)
         {
             try
             {
                 Success = true;
-                return (await response.Result.Content.ReadFromJsonAsync<ResponseData<Picture>>(_jsonSerializerOptions))?.Data;
+                return (await response.Content.ReadFromJsonAsync<ResponseData<Picture>>(_jsonSerializerOptions))?.Data;
             }
             catch (JsonException ex)
             {
@@ -99,7 +99,7 @@ public class DataService : IDataService
         }
     }
 
-    public async Task GetPicturesListAsync(string? categoryNormalizedName, int pageNo = 1)
+    public async Task GetPicturesListAsync(string? genreNormalizedName, int pageNo = 1)
     {
         var tokenResult = await _accessTokenProvider.RequestAccessToken();
         if (tokenResult.TryGetToken(out var token))
@@ -108,8 +108,8 @@ public class DataService : IDataService
         }
         var uri = new StringBuilder($"{_httpClient.BaseAddress!.AbsoluteUri}pictures/");
 
-        if (categoryNormalizedName != null)
-            uri.Append($"{categoryNormalizedName}/");
+        if (genreNormalizedName != null)
+            uri.Append($"{genreNormalizedName}/");
 
         if (pageNo > 1)
             uri.Append($"page{pageNo}");
