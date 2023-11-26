@@ -1,0 +1,16 @@
+﻿@page "/picturedata"
+@using Web_153501_Brykulskii.BlazorWasm.Components
+
+<PageTitle>Pictures</PageTitle>
+
+<PicturesList/>
+
+@code {
+    [Inject]
+    public IDataService DataService { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        await DataService.GetPicturesListAsync(null);
+    }
+}

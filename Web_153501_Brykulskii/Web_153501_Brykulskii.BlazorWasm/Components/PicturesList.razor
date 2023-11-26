@@ -1,0 +1,52 @@
+﻿@inject IDataService DataService
+@implements IDisposable
+
+<AuthorizeView>
+    <Authorized>
+
+        <h1>Pictures</h1>
+
+        @if (!DataService.Success || DataService.Pictures == null)
+        {
+            <p><em>Loading...</em></p>
+        }
+        else
+        {
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Description</th>
+                        <th>Author</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var picture in DataService.Pictures)
+                    {
+                        <tr>
+                            <td>@picture.Name</td>
+                            <td>@picture.Description</td>
+                            <td>@picture.Author</td>
+                            <td>@picture.Price</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        }
+    </Authorized>
+    <NotAuthorized>
+        <p>You're not authorized to view <a href="authentication/login">Log in</a> page.</p>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    protected override void OnInitialized()
+    {
+        DataService.OnPicturesChange += StateHasChanged;
+    }
+    public void Dispose()
+    {
+        DataService.OnPicturesChange -= StateHasChanged;
+    }
+}

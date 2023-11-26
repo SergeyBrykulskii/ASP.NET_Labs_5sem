@@ -14,7 +14,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web_153501_Brykulskii.Tests
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web_153501_Brykulskii.API.Tests", "Web_153501_Brykulskii.API.Tests\Web_153501_Brykulskii.API.Tests.csproj", "{F9CB9E5B-904E-4ADC-AA8B-9018867E175D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Web_153501_Brykulskii.BlazorWasm", "Web_153501_Brykulskii.BlazorWasm\Web_153501_Brykulskii.BlazorWasm.csproj", "{A4A37BBB-2DCB-4ACA-B832-D3B436C280E1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Web_153501_Brykulskii.BlazorWasm", "Web_153501_Brykulskii.BlazorWasm\Web_153501_Brykulskii.BlazorWasm.csproj", "{A4A37BBB-2DCB-4ACA-B832-D3B436C280E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
