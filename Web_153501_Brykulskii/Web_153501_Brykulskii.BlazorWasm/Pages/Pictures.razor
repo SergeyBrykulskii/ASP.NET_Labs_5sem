@@ -1,10 +1,15 @@
 ﻿@page "/pictures"
 @page "/pictures/{genre}"
+@attribute [Authorize]
+@using Domain.Entities;
+@using Microsoft.AspNetCore.Authorization;
 @using Web_153501_Brykulskii.BlazorWasm.Components
 
 <PageTitle>Pictures</PageTitle>
 <GenreSelector/>
-<PicturesList/>
+<PicturesList PictureSelected="FindPicture"/>
+<Pager Genre="@Genre" TotalPages="@DataService.TotalPages" CurrentPage="@DataService.CurrentPage" />
+<PictureDetails SelectedPicture="@SelectedPicture"/>
 
 @code {
     [Inject]
@@ -12,9 +17,8 @@
 
     [Parameter]
     public string Genre { get; set; }
-
     public string? SelectedGenre { get; set; }
-
+    public Picture? SelectedPicture { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -34,5 +38,11 @@
             SelectedGenre = "Все";
         }
 
+    }
+
+    public void FindPicture(int id)
+    {
+        SelectedPicture = DataService?.Pictures?.FirstOrDefault(c => c.Id == id);
+        StateHasChanged();
     }
 }

@@ -1,0 +1,23 @@
+﻿@using Domain.Entities
+
+@if (SelectedPicture is not null)
+{
+	<div class="clothes-details-container">
+		<div class="clothes-image">
+			@if (!string.IsNullOrEmpty(SelectedPicture.ImagePath))
+			{
+				<img src="@SelectedPicture.ImagePath" alt="Image" width="400" height="300" />
+			}
+		</div>
+		<div class="pictures-info">
+			<h2>@SelectedPicture.Name</h2>
+			<p>@SelectedPicture.Description</p>
+			<p>Price: @SelectedPicture.Price</p>
+		</div>
+	</div>
+}
+
+@code {
+	[Parameter]
+	public Picture? SelectedPicture { get; set; }
+}
